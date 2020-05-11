@@ -17,17 +17,22 @@ IACUC = "IACUC"
 SRS = "Research Safety"
 IBC = "Biosafety"
 DET = "Determinations"
+BOARDS = [RA, RDC, IRB, IACUC, SRS, IBC, DET]
 
 ROW_OFFSET = 7
+VALID_VALUE_CATS = ["REV", "ACT", "PRJ", "RIS", "SUB"]
+REVIEW_VV_CAT = "REV"
+ACTION_VV_CAT = "ACT"
+PRJ_STAT_VV_CAT = "PRJ"
+RISK_VV_CAT = "RIS"
+SUB_VV_CAT = "SUB"
 
 SUB_TYPES = ["AEO","MOD","CLS","REN","FUN","NEW","SBO","ORE","PDV","PUB","RES","REV","UPS"]
 IACUC_SUB_TYPES = ["MOD","CLS","REN","FIP","FUN","NEW","SBO","PUB","RES","REV","RPE"]
+
 REVIEW_TYPES = ["A","Q","M","E","C","F","L"]
-IACUC_REVIEW_TYPES = ["A","Q","M","E","C","F","L","D"]
-ACTIONS = ["ACK","APC","APP","CLS","DEF","EXE","FWD","INF",
-           "NAP","NRE","NHR","RFB","SMR","SUS","TBL","TER","WDN"]
-RD_ACTIONS = ["ACK","APC","APP","CLS","DEF","EXE","FWD",
-              "INF","NAP","NRE","NHR","RFB","SMR","SUS","TBL","TER","WDN","CAP"]
+
+ACTIONS = ["ACK","APC","APP","CLS","DEF","EXE","FWD","INF","NAP","NRE","NHR","RFB","SMR","SUS","TBL","TER","WDN"]
 
 RISK_LEVELS = ['MMR', 'MIN']
 
@@ -39,9 +44,14 @@ def print_error(line, message, offset=ROW_OFFSET):
     print("ERROR: LINE", line + offset, ":", message)
 
 
+def print_warning(line, message, offset=ROW_OFFSET):
+    print("WARNING: LINE", line + offset, ":", message)
+
+
 def validate_date(date):
     try:
-        # Excel gives timestamp as well
+        # pandas exports all date formats as YYYY-MM-DD HH:MM:SS
+        # Unknown if visual format in Excel effects the conversion process. Support should inspect data visually
         datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
         return True
     except ValueError:
@@ -52,9 +62,9 @@ def validate_encoding(text, encoding, line):
     try:
         text.encode(encoding, "strict")
     except UnicodeEncodeError as uee:
-        print_error(line, "{enc} Special Character detected: '{c}' in {txt}".format(enc=encoding,
-                                                                                    c=row[0][uee.start:uee.end],
-                                                                                    txt=text))
+        print_warning(line, "{enc} Special Character detected: '{c}' in {txt}".format(enc=encoding,
+                                                                                      c=text[uee.start:uee.end],
+                                                                                      txt=text))
 
 
 def validate_text(text, encoding, line):
@@ -64,10 +74,31 @@ def validate_text(text, encoding, line):
         print_error(line, "Special Character (Line Break) detected in {txt}".format(txt=text))
 
 
+def read_valid_values(filename):
+    # Initialize the dict
+    result = {}
+    for board in BOARDS:
+        inner = {}
+        for cat in VALID_VALUE_CATS:
+            inner[cat] = []
+        result[board]=inner
+
+    with pd.ExcelFile(filename) as xlsx:
+        values = pd.read_excel(xlsx, "values",header=0,names=["cat", "val", "code", RA, DET, IRB, IACUC, IBC, SRS, RDC])
+        for index, valid_value in values.iterrows():
+            for board in BOARDS:
+                if pd.notnull(valid_value[board]):
+                    result.get(board).get(valid_value["cat"]).append(valid_value["code"].strip())
+
+    return result
+
+
+valid_values = read_valid_values("valid_values_map.xlsx")
+
 filename = TEST_FILE
-try:
+if len(sys.argv) > 1:
     filename = sys.argv[1]
-except IndexError:
+else:
     if input("No file provided. Run with test file? Y/N") is 'Y':
         print("Running with test")
         filename = TEST_FILE
@@ -96,16 +127,13 @@ with pd.ExcelFile(filename) as xlsx:
     sheets.remove(PROJECT_INFO)
     sheets.remove(VALID_VALUES)
 
-    if IACUC not in sheets:
-        print("No IACUC detected. Ensure tab is titled", IACUC)
-
-    if RDC not in sheets:
-        print("No R&DC detected. Ensure tab is titled", RDC)
+    # Check for missing sheets
+    # [print("No", board, "detected. Ensure tab is titled", board) if board not in sheets else "" for board in BOARDS]
 
     for sheet in sheets:
         print("\nValidating", sheet)
         reviews = pd.read_excel(xlsx, sheet, header=HEADER_R0W, usecols="B:O",
-                                dtype={0:str, 5:str, 11:str, 12:str, 13:str})
+                                dtype={0: str, 5: str, 11: str, 12: str, 13: str})
         for index, row in reviews.iterrows():
             # Check all cells for unsupported characters
             [(validate_text(str(col), 'latin-1', index) if pd.notnull(col) else "") for col in row]
@@ -113,9 +141,6 @@ with pd.ExcelFile(filename) as xlsx:
             # if any column contains a value, validate the row
             if row.notnull().values.any():
                 # Check required fields
-                # TODO Allow Pending Review print Warning
-                # TODO Validate Vote fields print Warning if non-numeric
-
                 if pd.isnull(row[0]):
                     print_error(index, "SUBMISSION DATE required")
                 elif not validate_date(row[0]):
@@ -123,37 +148,91 @@ with pd.ExcelFile(filename) as xlsx:
 
                 if pd.isnull(row[1]):
                     print_error(index, 'SUBMISSION TYPE required')
-                elif row[1] not in (IACUC_SUB_TYPES if sheet is IACUC else SUB_TYPES):
-                    print_error(index, 'SUBMISSION TYPE {sub} invalid'.format(sub=row[1]))
+                elif row[1].strip() not in valid_values[sheet][SUB_VV_CAT]:
+                    if row[1].strip() not in (IACUC_SUB_TYPES if sheet == IACUC else SUB_TYPES):
+                        print_error(index, 'SUBMISSION TYPE {sub} invalid'.format(sub=row[1]))
+                    else:
+                        print_warning(index,
+                                      'SUBMISSION TYPE {sub} not supported by board type but does not cause failure'
+                                      .format(sub=row[1]))
 
-                if pd.isnull(row[3]):
-                    print_error(index, 'REVIEW TYPE required')
-                elif row[3] not in (IACUC_REVIEW_TYPES if sheet is IACUC else REVIEW_TYPES):
-                    print_error(index, 'REVIEW TYPE {rev} invalid'.format(rev=row[3]))
+                # Allow Submissions Pending Review
+                pending = False
+                if pd.notnull(row[0]) and pd.notnull(row[1]) and pd.isnull(row[3]):
+                    if pd.isnull(row[4]):
+                        if pd.isnull(row[5]):
+                            pending = True
+                            # Submission is Pending Review check all subsequent columns are blank.
+                            if any([pd.notnull(col) for col in row[6:]]):
+                                print_error(index, 'PENDING REVIEW but unvalidated review information entered')
+                            else:
+                                print_warning(index, 'Line is PENDING REVIEW')
 
-                if pd.isnull(row[4]):
-                    print_error(index, 'ACTION required')
-                elif row[4] not in (RD_ACTIONS if sheet is RDC else ACTIONS):
-                    print_error(index, 'ACTION {act} invalid'.format(act=row[4]))
+                if not pending:
+                    # Check Review Types
+                    if pd.isnull(row[3]):
+                        print_error(index, 'REVIEW TYPE required')
+                    elif row[3].strip() not in valid_values[sheet][REVIEW_VV_CAT]:
+                        if row[3].strip() not in REVIEW_TYPES:
+                            print_error(index, 'REVIEW TYPE {rev} invalid'.format(rev=row[3]))
+                        else:
+                            print_warning(index,
+                                          'REVIEW TYPE {rev} not supported by board type but does not cause failure'
+                                          .format(rev=row[3]))
 
-                if pd.isnull(row[5]):
-                    print_error(index, 'EFFECTIVE DATE required')
-                elif not validate_date(row[5]):
-                    print_error(index, "EFFECTIVE DATE {date} invalid".format(date=row[5]))
+                    # Check Action
+                    if pd.isnull(row[4]):
+                        print_error(index, 'ACTION required')
+                    elif row[4].strip() not in valid_values[sheet][ACTION_VV_CAT]:
+                        if row[4].strip() not in ACTIONS:
+                            print_error(index, 'ACTION {act} invalid'.format(act=row[4]))
+                        else:
+                            print_warning(
+                                index,
+                                'ACTION {act} not supported by board type but does not cause failure'
+                                .format(act=row[4]))
 
-                if pd.notnull(row[9]) and row[9] not in RISK_LEVELS:
-                    print_error(index, 'RISK LEVEL {risk} invalid'.format(risk=row[10]))
+                    # Check Effective Date
+                    if pd.isnull(row[5]):
+                        print_error(index, 'EFFECTIVE DATE required')
+                    elif not validate_date(row[5]):
+                        print_error(index, "EFFECTIVE DATE {date} invalid".format(date=row[5]))
 
-                if pd.notnull(row[10]) and row[10] not in PROJECT_STATUSES:
-                    print_error(index, 'PROJECT STATUS {status} invalid'.format(status=row[10]))
+                    # Check for non-numeric votes
+                    if any([pd.notnull(col) and not isinstance(col, int) and not isinstance(col, float) for col in row[6:8]]):
+                        print_warning(index, "VOTE non numeric")
 
-                if pd.notnull(row[11]) and not validate_date(row[11]):
-                    print_error(index, "EXPIRATION DATE {date} invalid".format(date=row[11]))
+                    # Check Risk Level
+                    if pd.notnull(row[9]) and row[9].strip() not in valid_values[sheet][RISK_VV_CAT]:
+                        # SRS, IBC, RDC do not record risk level. Providing a risk level for these boards does not cause
+                        # a failure. Don't reject a valid value
+                        if row[9].strip() not in RISK_LEVELS or sheet not in [SRS, IBC, RDC, IACUC]:
+                            print_error(index, 'RISK LEVEL {risk} invalid'.format(risk=row[9]))
 
-                if pd.notnull(row[12]) and not validate_date(row[12]):
-                    print_error(index, "INITIAL APPROVAL DATE {date} invalid".format(date=row[12]))
+                    # Check Project Status
+                    if pd.notnull(row[10]) and row[10].strip() not in valid_values[sheet][PRJ_STAT_VV_CAT]:
+                        if row[10].strip() not in PROJECT_STATUSES:
+                            print_error(index, 'PROJECT STATUS {status} invalid'.format(status=row[10]))
+                        else:
+                            print_warning(index,
+                                          'PROJECT STATUS {status} not supported by board but does not cause failure'
+                                          .format(status=row[10]))
 
-                if pd.notnull(row[13]) and not validate_date(row[13]):
-                    print_error(index, "REPORT DUE {date} invalid".format(date=row[13]))
+                    # Check Expiration Date
+                    if pd.notnull(row[11]) and not validate_date(row[11]):
+                        print_error(index, "EXPIRATION DATE {date} invalid".format(date=row[11]))
 
+                    # Check Initial Approval Date
+                    if pd.notnull(row[12]) and not validate_date(row[12]):
+                        print_error(index, "INITIAL APPROVAL DATE {date} invalid".format(date=row[12]))
+
+                    # Check Report Due Date
+                    if pd.notnull(row[13]):
+                        if not validate_date(row[13]):
+                            print_error(index, "REPORT DUE {date} invalid".format(date=row[13]))
+
+                        if row[13] == row[11]:
+                            print_error(index,
+                                        "REPORT DUE {date} cannot equal EXPIRATION DATE {exp}".format(date=row[13],
+                                                                                                      exp=row[11]))
     print("Done!")

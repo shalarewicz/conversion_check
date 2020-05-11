@@ -1,0 +1,204 @@
+Detected Sheets ['Project Information', 'Research Administration', 'Determinations', 'R&D', 'IRB', 'IACUC', 'Research Safety', 'Biosafety', 'Valid Values']
+
+Validating Project Information
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in Project 1 - Special Characters ”
+WARNING: LINE 7 : latin-1 Special Character detected: '–' in PI First –
+WARNING: LINE 7 : latin-1 Special Character detected: '’' in PI Last ’
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in degree ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in sponsor ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in keyword ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in internal ref # ”
+ERROR: LINE 8 : Special Character (Line Break) detected in Project 2 - Line Break
+
+ERROR: LINE 8 : Special Character (Line Break) detected in PI 
+First
+ERROR: LINE 8 : Special Character (Line Break) detected in PI 
+Last
+ERROR: LINE 8 : Special Character (Line Break) detected in PI 
+DEGREES
+ERROR: LINE 8 : Special Character (Line Break) detected in SPONSOR
+
+ERROR: LINE 8 : Special Character (Line Break) detected in KEYW
+ORDS
+ERROR: LINE 8 : Special Character (Line Break) detected in INTERNAL REFERENCE NUMBER
+
+ERROR: LINE 9 : PROJECT TITLE required
+ERROR: LINE 10 : PI FIRST NAME required
+ERROR: LINE 11 : PI LAST NAME required
+ERROR: LINE 12 : PROJECT TITLE required
+ERROR: LINE 12 : PI FIRST NAME required
+ERROR: LINE 12 : PI LAST NAME required
+
+Validating Research Administration
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in ”
+WARNING: LINE 7 : latin-1 Special Character detected: '”' in ”
+WARNING: LINE 7 : VOTE non numeric
+ERROR: LINE 8 : Special Character (Line Break) detected in 1/1/2020
+
+ERROR: LINE 8 : Special Character (Line Break) detected in NEW
+
+ERROR: LINE 8 : Special Character (Line Break) detected in board ref
+num
+ERROR: LINE 8 : Special Character (Line Break) detected in A
+
+ERROR: LINE 8 : Special Character (Line Break) detected in APP
+
+ERROR: LINE 8 : Special Character (Line Break) detected in 1/2/2020
+
+ERROR: LINE 8 : Special Character (Line Break) detected in 1
+2
+ERROR: LINE 8 : Special Character (Line Break) detected in 1
+2
+ERROR: LINE 8 : Special Character (Line Break) detected in 1
+2
+ERROR: LINE 8 : Special Character (Line Break) detected in 
+MIN
+ERROR: LINE 8 : Special Character (Line Break) detected in ACT
+
+ERROR: LINE 8 : Special Character (Line Break) detected in 1/4/2020
+
+ERROR: LINE 8 : SUBMISSION DATE 1/1/2020
+ invalid
+ERROR: LINE 8 : EFFECTIVE DATE 1/2/2020
+ invalid
+WARNING: LINE 8 : VOTE non numeric
+ERROR: LINE 8 : INITIAL APPROVAL DATE 1/4/2020
+ invalid
+WARNING: LINE 13 : Line is PENDING REVIEW
+ERROR: LINE 14 : SUBMISSION DATE required
+ERROR: LINE 14 : SUBMISSION TYPE required
+ERROR: LINE 14 : REVIEW TYPE required
+ERROR: LINE 14 : ACTION required
+ERROR: LINE 14 : EFFECTIVE DATE required
+ERROR: LINE 15 : SUBMISSION TYPE NE invalid
+ERROR: LINE 15 : REVIEW TYPE X invalid
+ERROR: LINE 15 : ACTION RDV invalid
+ERROR: LINE 15 : RISK LEVEL M invalid
+ERROR: LINE 15 : PROJECT STATUS ACP invalid
+ERROR: LINE 16 : SUBMISSION DATE 1/1/20 invalid
+ERROR: LINE 16 : EFFECTIVE DATE 2020-11-31 invalid
+ERROR: LINE 16 : EXPIRATION DATE 43946 invalid
+ERROR: LINE 16 : INITIAL APPROVAL DATE April 25th invalid
+WARNING: LINE 17 : VOTE non numeric
+ERROR: LINE 20 : PENDING REVIEW but unvalidated review information entered
+ERROR: LINE 21 : REPORT DUE 2020-01-04 00:00:00 cannot equal EXPIRATION DATE 2020-01-04 00:00:00
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 25 : ACTION DEF not supported by board type but does not cause failure
+WARNING: LINE 26 : REVIEW TYPE F not supported by board type but does not cause failure
+ERROR: LINE 28 : REVIEW TYPE D invalid
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+WARNING: LINE 35 : ACTION TBL not supported by board type but does not cause failure
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+ERROR: LINE 38 : ACTION CAP invalid
+
+Validating Determinations
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 25 : ACTION DEF not supported by board type but does not cause failure
+WARNING: LINE 26 : REVIEW TYPE F not supported by board type but does not cause failure
+ERROR: LINE 28 : REVIEW TYPE D invalid
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+WARNING: LINE 35 : ACTION TBL not supported by board type but does not cause failure
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+ERROR: LINE 38 : ACTION CAP invalid
+
+Validating R&D
+WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
+WARNING: LINE 22 : ACTION APC not supported by board type but does not cause failure
+WARNING: LINE 23 : REVIEW TYPE M not supported by board type but does not cause failure
+WARNING: LINE 24 : REVIEW TYPE E not supported by board type but does not cause failure
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 26 : ACTION EXE not supported by board type but does not cause failure
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 30 : ACTION NRE not supported by board type but does not cause failure
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+WARNING: LINE 34 : PROJECT STATUS EMU not supported by board but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+WARNING: LINE 35 : PROJECT STATUS EXE not supported by board but does not cause failure
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
+WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
+WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+
+Validating IRB
+ERROR: LINE 28 : REVIEW TYPE D invalid
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+ERROR: LINE 38 : ACTION CAP invalid
+
+Validating IACUC
+ERROR: LINE 22 : SUBMISSION TYPE AEO invalid
+WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
+WARNING: LINE 22 : ACTION APC not supported by board type but does not cause failure
+WARNING: LINE 22 : PROJECT STATUS ACC not supported by board but does not cause failure
+WARNING: LINE 23 : REVIEW TYPE M not supported by board type but does not cause failure
+WARNING: LINE 23 : PROJECT STATUS ACD not supported by board but does not cause failure
+WARNING: LINE 24 : REVIEW TYPE E not supported by board type but does not cause failure
+WARNING: LINE 24 : PROJECT STATUS ALC not supported by board but does not cause failure
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 25 : ACTION DEF not supported by board type but does not cause failure
+WARNING: LINE 25 : PROJECT STATUS ACL not supported by board but does not cause failure
+WARNING: LINE 26 : ACTION EXE not supported by board type but does not cause failure
+WARNING: LINE 26 : PROJECT STATUS ACO not supported by board but does not cause failure
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+ERROR: LINE 29 : SUBMISSION TYPE ORE invalid
+ERROR: LINE 30 : SUBMISSION TYPE PDV invalid
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+ERROR: LINE 34 : SUBMISSION TYPE UPS invalid
+WARNING: LINE 34 : PROJECT STATUS EMU not supported by board but does not cause failure
+WARNING: LINE 35 : PROJECT STATUS EXE not supported by board but does not cause failure
+WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
+ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+
+Validating Research Safety
+WARNING: LINE 22 : SUBMISSION TYPE AEO not supported by board type but does not cause failure
+WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
+WARNING: LINE 22 : ACTION APC not supported by board type but does not cause failure
+WARNING: LINE 22 : PROJECT STATUS ACC not supported by board but does not cause failure
+WARNING: LINE 23 : PROJECT STATUS ACD not supported by board but does not cause failure
+WARNING: LINE 24 : PROJECT STATUS ALC not supported by board but does not cause failure
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 25 : PROJECT STATUS ACL not supported by board but does not cause failure
+WARNING: LINE 26 : PROJECT STATUS ACO not supported by board but does not cause failure
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 30 : ACTION NRE not supported by board type but does not cause failure
+WARNING: LINE 31 : SUBMISSION TYPE PUB not supported by board type but does not cause failure
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+WARNING: LINE 34 : SUBMISSION TYPE UPS not supported by board type but does not cause failure
+WARNING: LINE 34 : PROJECT STATUS EMU not supported by board but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
+WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
+ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+
+Validating Biosafety
+WARNING: LINE 22 : SUBMISSION TYPE AEO not supported by board type but does not cause failure
+WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
+WARNING: LINE 22 : ACTION APC not supported by board type but does not cause failure
+WARNING: LINE 22 : PROJECT STATUS ACC not supported by board but does not cause failure
+WARNING: LINE 23 : PROJECT STATUS ACD not supported by board but does not cause failure
+WARNING: LINE 24 : PROJECT STATUS ALC not supported by board but does not cause failure
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 25 : PROJECT STATUS ACL not supported by board but does not cause failure
+WARNING: LINE 26 : PROJECT STATUS ACO not supported by board but does not cause failure
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 30 : ACTION NRE not supported by board type but does not cause failure
+WARNING: LINE 31 : SUBMISSION TYPE PUB not supported by board type but does not cause failure
+WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
+WARNING: LINE 34 : SUBMISSION TYPE UPS not supported by board type but does not cause failure
+WARNING: LINE 34 : PROJECT STATUS EMU not supported by board but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
+WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
+ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+Done!
