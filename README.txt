@@ -21,12 +21,12 @@ Checks for common errors in conversion data including
 
 Requirements
 	pip install -r requirements.txt
-	- python 3
+	- python 3.8.3
 	- pandas
 	- valid_values_map.xlsx in root directory
 
 Run with
-	py -3 conversion-check.py <filename>
+	py -3 conversion-check.py <filename.xlsx> output.txt
 
 Test on 
 	-"Test Data Conversion Model.xlsx" compare output to gold.txt
