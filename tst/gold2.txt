@@ -1,11 +1,6 @@
 Detected Sheets ['Project Information', 'Valid Values']
 
 Validating Project Information
-No Research Administration detected. Ensure tab is titled Research Administration
-No R&D detected. Ensure tab is titled R&D
-No IRB detected. Ensure tab is titled IRB
-No IACUC detected. Ensure tab is titled IACUC
-No Research Safety detected. Ensure tab is titled Research Safety
-No Biosafety detected. Ensure tab is titled Biosafety
-No Determinations detected. Ensure tab is titled Determinations
+
+List of Un-reviewed projects
 Done!

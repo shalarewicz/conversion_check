@@ -1,13 +1,13 @@
 Detected Sheets ['Project Information', 'Research Administration', 'Determinations', 'R&D', 'IRB', 'IACUC', 'Research Safety', 'Biosafety', 'Valid Values']
 
 Validating Project Information
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in Project 1 - Special Characters ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äì' in PI First ‚Äì
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äô' in PI Last ‚Äô
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in degree ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in sponsor ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in keyword ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in internal ref # ‚Äù
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in Project 1 - Special Characters î
+WARNING: LINE 7 : latin-1 Special Character detected: 'ñ' in PI First ñ
+WARNING: LINE 7 : latin-1 Special Character detected: 'í' in PI Last í
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in degree î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in sponsor î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in keyword î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in internal ref # î
 ERROR: LINE 8 : Special Character (Line Break) detected in Project 2 - Line Break
 
 ERROR: LINE 8 : Special Character (Line Break) detected in PI 
@@ -23,6 +23,7 @@ ORDS
 ERROR: LINE 8 : Special Character (Line Break) detected in INTERNAL REFERENCE NUMBER
 
 ERROR: LINE 9 : PROJECT TITLE required
+ERROR: LINE 9 : INTERNAL REFERENCE NUMBER cannot contain a comma
 ERROR: LINE 10 : PI FIRST NAME required
 ERROR: LINE 11 : PI LAST NAME required
 ERROR: LINE 12 : PROJECT TITLE required
@@ -30,11 +31,13 @@ ERROR: LINE 12 : PI FIRST NAME required
 ERROR: LINE 12 : PI LAST NAME required
 
 Validating Research Administration
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in ‚Äù
-WARNING: LINE 7 : latin-1 Special Character detected: '‚Äù' in ‚Äù
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in î
+WARNING: LINE 7 : latin-1 Special Character detected: 'î' in î
 WARNING: LINE 7 : VOTE non numeric
+WARNING: LINE 7 : EXPIRED PROJECT
+WARNING: LINE 7 : REPORT PAST DUE
 ERROR: LINE 8 : Special Character (Line Break) detected in 1/1/2020
 
 ERROR: LINE 8 : Special Character (Line Break) detected in NEW
@@ -64,42 +67,67 @@ ERROR: LINE 8 : SUBMISSION DATE 1/1/2020
 ERROR: LINE 8 : EFFECTIVE DATE 1/2/2020
  invalid
 WARNING: LINE 8 : VOTE non numeric
+WARNING: LINE 8 : EXPIRED PROJECT
 ERROR: LINE 8 : INITIAL APPROVAL DATE 1/4/2020
  invalid
+WARNING: LINE 8 : REPORT PAST DUE
 WARNING: LINE 13 : Line is PENDING REVIEW
 ERROR: LINE 14 : SUBMISSION DATE required
 ERROR: LINE 14 : SUBMISSION TYPE required
 ERROR: LINE 14 : REVIEW TYPE required
 ERROR: LINE 14 : ACTION required
 ERROR: LINE 14 : EFFECTIVE DATE required
+WARNING: LINE 14 : EXPIRED PROJECT
+WARNING: LINE 14 : REPORT PAST DUE
 ERROR: LINE 15 : SUBMISSION TYPE NE invalid
 ERROR: LINE 15 : REVIEW TYPE X invalid
 ERROR: LINE 15 : ACTION RDV invalid
 ERROR: LINE 15 : RISK LEVEL M invalid
 ERROR: LINE 15 : PROJECT STATUS ACP invalid
+WARNING: LINE 15 : EXPIRED PROJECT
+WARNING: LINE 15 : REPORT PAST DUE
 ERROR: LINE 16 : SUBMISSION DATE 1/1/20 invalid
 ERROR: LINE 16 : EFFECTIVE DATE 2020-11-31 invalid
 ERROR: LINE 16 : EXPIRATION DATE 43946 invalid
 ERROR: LINE 16 : INITIAL APPROVAL DATE April 25th invalid
+WARNING: LINE 16 : REPORT PAST DUE
 WARNING: LINE 17 : VOTE non numeric
 ERROR: LINE 20 : PENDING REVIEW but unvalidated review information entered
+WARNING: LINE 21 : EXPIRED PROJECT
 ERROR: LINE 21 : REPORT DUE 2020-01-04 00:00:00 cannot equal EXPIRATION DATE 2020-01-04 00:00:00
+WARNING: LINE 21 : REPORT PAST DUE
+WARNING: LINE 24 : REVIEW TYPE E not supported by board type but does not cause failure
 WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
 WARNING: LINE 25 : ACTION DEF not supported by board type but does not cause failure
 WARNING: LINE 26 : REVIEW TYPE F not supported by board type but does not cause failure
-ERROR: LINE 28 : REVIEW TYPE D invalid
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 28 : REVIEW TYPE D not supported by board type but does not cause failure
 WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
 WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause failure
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 WARNING: LINE 35 : ACTION TBL not supported by board type but does not cause failure
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
 ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 42 : EXPIRED PROJECT
+ERROR: LINE 42 : REPORT DUE 2021-03-09 00:00:00 cannot equal EXPIRATION DATE 2021-03-09 00:00:00
+WARNING: LINE 42 : REPORT PAST DUE
+WARNING: LINE 44 : Questionable EXPIRATION DATE: 2022-08-31 00:00:00
+WARNING: LINE 44 : Questionable REPORT DUE DATE: 2022-03-10 00:00:00
+WARNING: LINE 45 : SUBMISSION DATE 2035-01-01 00:00:00 greater than EFFECTIVE DATE 2020-01-02 00:00:00
+WARNING: LINE 45 : SUBMISSION DATE 2035-01-01 00:00:00 is in future
+WARNING: LINE 45 : EXPIRED PROJECT
+WARNING: LINE 45 : EXPIRATION DATE 2019-01-22 00:00:00 less than EFFECTIVE DATE 2020-01-02 00:00:00
+WARNING: LINE 45 : INITIAL APPROVAL DATE 2021-01-01 00:00:00 greater than EFFECTIVE DATE 2020-01-02 00:00:00
+WARNING: LINE 45 : REPORT PAST DUE
+WARNING: LINE 45 : REPORT DUE DATE 2019-01-24 00:00:00 less than EFFECTIVE DATE 2020-01-02 00:00:00
 
 Validating Determinations
+WARNING: LINE 24 : REVIEW TYPE E not supported by board type but does not cause failure
 WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
 WARNING: LINE 25 : ACTION DEF not supported by board type but does not cause failure
 WARNING: LINE 26 : REVIEW TYPE F not supported by board type but does not cause failure
-ERROR: LINE 28 : REVIEW TYPE D invalid
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 28 : REVIEW TYPE D not supported by board type but does not cause failure
 WARNING: LINE 31 : ACTION NHR not supported by board type but does not cause failure
 WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause failure
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
@@ -126,7 +154,7 @@ WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause 
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
 
 Validating IRB
-ERROR: LINE 28 : REVIEW TYPE D invalid
+WARNING: LINE 28 : REVIEW TYPE D not supported by board type but does not cause failure
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
 ERROR: LINE 38 : ACTION CAP invalid
@@ -155,6 +183,7 @@ WARNING: LINE 35 : PROJECT STATUS EXE not supported by board but does not cause 
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
 ERROR: LINE 38 : ACTION CAP invalid
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+WARNING: LINE 44 : Questionable EXPIRATION DATE: 2035-03-09 00:00:00
 
 Validating Research Safety
 WARNING: LINE 22 : SUBMISSION TYPE AEO not supported by board type but does not cause failure
@@ -201,4 +230,9 @@ WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause 
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
 ERROR: LINE 38 : ACTION CAP invalid
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+
+List of Un-reviewed projects
+WARNING: LINE 12 : PROJECT UNREVIEWED
+WARNING: LINE 13 : PROJECT UNREVIEWED
+WARNING: LINE 20 : PROJECT UNREVIEWED
 Done!

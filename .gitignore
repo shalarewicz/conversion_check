@@ -1,0 +1,9 @@
+cmd.exe
+cmd.exe.lnk
+.idea/*
+env/*
+desktop.ini
+tst/desktop.ini
+tst/test.xlsx
+titles.txt
+Current GovCloud Values.xlsx
