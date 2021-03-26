@@ -18,7 +18,8 @@ IACUC = "IACUC"
 SRS = "Research Safety"
 IBC = "Biosafety"
 DET = "Determinations"
-BOARDS = [RA, RDC, IRB, IACUC, SRS, IBC, DET]
+RSEC = "Scientific Review"
+BOARDS = [RA, RDC, IRB, IACUC, SRS, IBC, DET, RSEC]
 
 ROW_OFFSET = 7
 VALID_VALUE_CATS = ["REV", "ACT", "PRJ", "RIS", "SUB"]
@@ -33,7 +34,7 @@ IACUC_SUB_TYPES = ["MOD","CLS","REN","FIP","FUN","NEW","SBO","PUB","RES","REV","
 
 REVIEW_TYPES = ["A","Q","M","E","C","F","L","D"]
 
-ACTIONS = ["ACK","APC","APP","CLS","DEF","EXE","FWD","INF","NAP","NRE","NHR","RFB","SMR","SUS","TBL","TER","WDN"]
+ACTIONS = ["ACK","APC","APP","CLS","DEF","EXE","FWD","INF","NAP","NRE","NHR","RFB","SMR","SUS","TBL","TER","WDN", "RNE", "CAP"]
 
 RISK_LEVELS = ['MMR', 'MIN']
 
@@ -98,7 +99,7 @@ def read_valid_values(filename):
         result[board]=inner
 
     with pd.ExcelFile(filename) as xlsx:
-        values = pd.read_excel(xlsx, "values",header=0,names=["cat", "val", "code", RA, DET, IRB, IACUC, IBC, SRS, RDC])
+        values = pd.read_excel(xlsx, "values",header=0,names=["cat", "val", "code", RA, DET, IRB, IACUC, IBC, SRS, RDC, RSEC])
         for index, valid_value in values.iterrows():
             for board in BOARDS:
                 if pd.notnull(valid_value[board]):
@@ -269,9 +270,10 @@ with pd.ExcelFile(filename) as xlsx:
                                 if expiration_date <= datetime.today():
                                     print_warning(index, "EXPIRED PROJECT")
 
-                                # Check if Expiration Date is within next year for non-IACUC boards and next 3 for IACUC
+                                # Check if Expiration Date is within next 3 years for IBC, IACUC, SRS boards
+                                # or 1 year for all others
                                 elif not expiration_date <= CURRENT_DATE.replace(
-                                        year=CURRENT_DATE.year + (3 if sheet == IACUC else 1)):
+                                        year=CURRENT_DATE.year + (3 if sheet in [IACUC, IBC, SRS] else 1)):
                                     print_warning(index, "Questionable EXPIRATION DATE: {date}".format(date=row[11]))
 
                                 # Check that Expiration is after Effective Date

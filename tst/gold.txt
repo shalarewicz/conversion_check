@@ -1,4 +1,4 @@
-Detected Sheets ['Project Information', 'Research Administration', 'Determinations', 'R&D', 'IRB', 'IACUC', 'Research Safety', 'Biosafety', 'Valid Values']
+Detected Sheets ['Project Information', 'Research Administration', 'Determinations', 'R&D', 'IRB', 'IACUC', 'Research Safety', 'Biosafety', 'Scientific Review', 'Valid Values']
 
 Validating Project Information
 WARNING: LINE 7 : latin-1 Special Character detected: '”' in Project 1 - Special Characters ”
@@ -109,7 +109,7 @@ WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause fai
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 WARNING: LINE 35 : ACTION TBL not supported by board type but does not cause failure
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 WARNING: LINE 42 : EXPIRED PROJECT
 ERROR: LINE 42 : REPORT DUE 2021-03-26 00:00:00 cannot equal EXPIRATION DATE 2021-03-26 00:00:00
 WARNING: LINE 42 : REPORT PAST DUE
@@ -151,7 +151,7 @@ WARNING: LINE 32 : ACTION RFB not supported by board type but does not cause fai
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 WARNING: LINE 35 : ACTION TBL not supported by board type but does not cause failure
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 
 Validating R&D
 WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
@@ -170,12 +170,13 @@ ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
 WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+WARNING: LINE 39 : ACTION RNE not supported by board type but does not cause failure
 
 Validating IRB
 WARNING: LINE 28 : REVIEW TYPE D not supported by board type but does not cause failure
 ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 
 Validating IACUC
 ERROR: LINE 22 : SUBMISSION TYPE AEO invalid
@@ -199,8 +200,9 @@ ERROR: LINE 34 : SUBMISSION TYPE UPS invalid
 WARNING: LINE 34 : PROJECT STATUS EMU not supported by board but does not cause failure
 WARNING: LINE 35 : PROJECT STATUS EXE not supported by board but does not cause failure
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+WARNING: LINE 39 : ACTION RNE not supported by board type but does not cause failure
 WARNING: LINE 44 : Questionable EXPIRATION DATE: 2035-03-09 00:00:00
 
 Validating Research Safety
@@ -223,8 +225,10 @@ ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
 WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+WARNING: LINE 39 : ACTION RNE not supported by board type but does not cause failure
+WARNING: LINE 44 : Questionable EXPIRATION DATE: 2025-05-04 00:00:00
 
 Validating Biosafety
 WARNING: LINE 22 : SUBMISSION TYPE AEO not supported by board type but does not cause failure
@@ -246,8 +250,22 @@ ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
 ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
 WARNING: LINE 36 : PROJECT STATUS NRE not supported by board but does not cause failure
 WARNING: LINE 37 : PROJECT STATUS RNE not supported by board but does not cause failure
-ERROR: LINE 38 : ACTION CAP invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 WARNING: LINE 38 : PROJECT STATUS NHR not supported by board but does not cause failure
+WARNING: LINE 39 : ACTION RNE not supported by board type but does not cause failure
+WARNING: LINE 44 : Questionable EXPIRATION DATE: 2025-05-04 00:00:00
+
+Validating Scientific Review
+WARNING: LINE 22 : REVIEW TYPE Q not supported by board type but does not cause failure
+ERROR: LINE 22 : RISK LEVEL MIN   invalid
+WARNING: LINE 23 : REVIEW TYPE M not supported by board type but does not cause failure
+WARNING: LINE 24 : REVIEW TYPE E not supported by board type but does not cause failure
+WARNING: LINE 25 : REVIEW TYPE C not supported by board type but does not cause failure
+WARNING: LINE 27 : REVIEW TYPE L not supported by board type but does not cause failure
+WARNING: LINE 28 : REVIEW TYPE D not supported by board type but does not cause failure
+ERROR: LINE 35 : SUBMISSION TYPE FIP invalid
+ERROR: LINE 36 : SUBMISSION TYPE RPE invalid
+WARNING: LINE 38 : ACTION CAP not supported by board type but does not cause failure
 
 List of Un-reviewed projects
 WARNING: LINE 12 : PROJECT UNREVIEWED

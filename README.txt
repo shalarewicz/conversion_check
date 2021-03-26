@@ -1,8 +1,8 @@
-Date: 2020-05-11
+Date: 2021-03-26
 Author: Stephan Halarewicz
 
 Validates IRBNet Conversion Kit
-Conversion Kit tabs should be titled Research Administration, R&D, IRB, IACUC, IBC, Research Safety, Biosafety, Determinations
+Conversion Kit tabs should be titled Research Administration, R&D, IRB, IACUC, Research Safety, Biosafety, Determinations, Scientific Review
 
 Checks for common errors in conversion data including
 	- Characters not supported by the latin-1 encoding
@@ -21,7 +21,7 @@ Checks for common errors in conversion data including
 	- Checks that all projects have been reviewed by at least one board
 	- Reasonable Date Checks
 		- Expiration and Report Due Dates greater than the Effective Date
-		- Expiration and Report Due Dates less than 1 year from today (3 years for Expiration in IACUC)
+		- Expiration and Report Due Dates less than 1 year from today (3 years for Expiration in IACUC, IBC, SRS)
 		- Submission Date is in the past
 		- Initial Approval Date before Effective Date
 		- Next Report Due not equal to Expiration
@@ -34,7 +34,7 @@ Requirements
 	- valid_values_map.xlsx in root directory
 
 Run with
-	py -3 conversion-check.py filename.xlsx > output.txt
+	py -3 conversion_check.py filename.xlsx > output.txt
 
 Test on
 	-"Test Data Conversion Model.xlsx" compare output to gold.txt
