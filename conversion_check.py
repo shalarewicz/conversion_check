@@ -156,7 +156,10 @@ with pd.ExcelFile(filename) as xlsx:
     for sheet in sheets:
         print("\nValidating", sheet)
         reviews = pd.read_excel(xlsx, sheet, header=HEADER_R0W, usecols="B:O",
-                                dtype={0: str, 5: str, 11: str, 12: str, 13: str})
+                                dtype={0: str, 5: str, 11: str, 12: str, 13: str},
+                                na_values=[''],
+                                keep_default_na=False)
+        count = 0
         for index, row in reviews.iterrows():
             try:
                 # Check all cells for unsupported characters
@@ -190,15 +193,17 @@ with pd.ExcelFile(filename) as xlsx:
 
                     # Allow Submissions Pending Review
                     pending = False
-                    if pd.notnull(row[0]) and pd.notnull(row[1]) and pd.isnull(row[3]):
-                        if pd.isnull(row[4]):
-                            if pd.isnull(row[5]):
-                                pending = True
-                                # Submission is Pending Review check all subsequent columns are blank.
-                                if any([pd.notnull(col) for col in row[6:]]):
-                                    print_error(index, 'PENDING REVIEW but unvalidated review information entered')
-                                else:
-                                    print_warning(index, 'Line is PENDING REVIEW')
+
+                    # Sub Date and Type Entered
+                    if pd.notnull(row[0]) and pd.notnull(row[1]):
+                        # Effective, Review Type and Action are blank
+                        if pd.isnull(row[3]) and pd.isnull(row[4]) and pd.isnull(row[5]):
+                            pending = True
+                            # Submission is Pending Review check all subsequent columns are blank.
+                            if any([pd.notnull(col) for col in row[6:]]):
+                                print_error(index, 'PENDING REVIEW but unvalidated review information entered')
+                            else:
+                                print_warning(index, 'Line is PENDING REVIEW')
 
                     if not pending:
                         if index in projects:
