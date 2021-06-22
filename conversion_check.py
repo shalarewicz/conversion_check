@@ -202,13 +202,16 @@ with pd.ExcelFile(FILE) as xlsx:
                             pending = True
                             # Submission is Pending Review check all subsequent columns are blank.
                             if any([pd.notnull(col) for col in row[6:]]):
-                                print_error(index, 'PENDING REVIEW but review information entered')
+                                # Pending review projects with review information will count as reviewed. 
+                                if index in projects:
+                                    projects.remove(index)
+                                print_warning(index, 'PENDING REVIEW but review information entered')
                             else:
                                 print_warning(index, 'Line is PENDING REVIEW')
-
-                    if not pending:
-                        if index in projects:
-                            projects.remove(index)
+                        else:
+                            # Line is not pending review
+                            if index in projects:
+                                projects.remove(index)
 
                     # Check Review Types
                     if pd.isnull(row[3]):
@@ -233,7 +236,7 @@ with pd.ExcelFile(FILE) as xlsx:
                             print_warning(
                                 index,
                                 'ACTION {act} not supported by board type but does not cause failure'
-                                .format(act=row[4]))
+                                    .format(act=row[4]))
 
                     # Check Effective Date
                     if pd.isnull(row[5]):
@@ -320,7 +323,7 @@ with pd.ExcelFile(FILE) as xlsx:
                             if row[13] == row[11]:
                                 print_error(index,
                                             "REPORT DUE {date} cannot equal EXPIRATION DATE {exp}".format(date=row[13],
-                                                                                                     exp=row[11]))
+                                                                                                          exp=row[11]))
                             report_due = get_date(row[13])
 
                             if report_due <= CURRENT_DATE:
