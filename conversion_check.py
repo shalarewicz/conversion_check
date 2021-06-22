@@ -1,12 +1,22 @@
 import pandas as pd
 from datetime import datetime
 import sys
-import traceback
+# import traceback
+import argparse
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required.")
 
-TEST_FILE = "Data Conversion Model.xlsx"
+arg_parser = argparse.ArgumentParser(description='Validate conversion data')
+
+# Optional: -i 1000 will print every 1000 email to help track progress
+arg_parser.add_argument("-t", "--test", action="store_true", help="use test data")
+arg_parser.add_argument("file")
+args = arg_parser.parse_args()
+
+TEST = args.test
+FILE = args.file
+
 PROJECT_INFO = "Project Information"
 HEADER_R0W = 5
 VALID_VALUES = "Valid Values"
@@ -45,7 +55,7 @@ MIN_DATE = datetime(1970,1,1)
 
 MAX_DATE = datetime(2037,12,31)
 
-CURRENT_DATE = datetime.today()
+CURRENT_DATE = datetime(2021, 3, 26) if TEST else datetime.today()
 
 
 def print_error(line, message, offset=ROW_OFFSET):
@@ -110,17 +120,7 @@ def read_valid_values(filename):
 
 valid_values = read_valid_values("valid_values_map.xlsx")
 
-filename = TEST_FILE
-if len(sys.argv) > 1:
-    filename = sys.argv[1]
-else:
-    if input("No file provided. Run with test file? Y/N") == 'Y':
-        print("Running with test")
-        filename = TEST_FILE
-    else:
-        sys.exit()
-
-with pd.ExcelFile(filename) as xlsx:
+with pd.ExcelFile(FILE) as xlsx:
     sheets = xlsx.sheet_names
     print("Detected Sheets", sheets)
 
@@ -179,7 +179,7 @@ with pd.ExcelFile(filename) as xlsx:
                                 print_warning(index,
                                               "SUBMISSION DATE {date} greater than EFFECTIVE DATE {eff_date}"
                                               .format(date=row[0], eff_date=row[5]))
-                        if get_date(row[0]) > datetime.today():
+                        if get_date(row[0]) > CURRENT_DATE:
                             print_warning(index, "SUBMISSION DATE {date} is in future".format(date=row[0]))
 
                     if pd.isnull(row[1]):
@@ -241,7 +241,7 @@ with pd.ExcelFile(filename) as xlsx:
                             print_error(index, 'EFFECTIVE DATE required')
                     elif not validate_date(row[5]):
                         print_error(index, "EFFECTIVE DATE {date} invalid".format(date=row[5]))
-                    elif get_date(row[5]) > datetime.today():
+                    elif get_date(row[5]) > CURRENT_DATE:
                         print_warning(index, "EFFECTIVE DATE {date} is in future".format(date=row[5]))
 
                     # Check for non-numeric votes
@@ -270,7 +270,7 @@ with pd.ExcelFile(filename) as xlsx:
                             print_error(index, "EXPIRATION DATE {date} invalid".format(date=row[11]))
                         else:
                             expiration_date = get_date(row[11])
-                            if expiration_date <= datetime.today():
+                            if expiration_date <= CURRENT_DATE:
                                 print_warning(index, "EXPIRED PROJECT")
 
                             # Check if Expiration Date is within next 3 years for IBC, IACUC, SRS boards
@@ -323,7 +323,7 @@ with pd.ExcelFile(filename) as xlsx:
                                                                                                      exp=row[11]))
                             report_due = get_date(row[13])
 
-                            if report_due <= datetime.today():
+                            if report_due <= CURRENT_DATE:
                                 print_warning(index, "REPORT PAST DUE")
                             # Check if Report Due Date is within next year
                             elif not report_due <= CURRENT_DATE.replace(
@@ -345,7 +345,7 @@ with pd.ExcelFile(filename) as xlsx:
             except Exception as e:
                 print_error(index, "Error parsing line. Please review.")
                 print(e.__class__, e)
-                traceback.print_exc()
+                # traceback.print_exc()
 
     print("\nList of Un-reviewed projects")
     if len(projects) != 0:
