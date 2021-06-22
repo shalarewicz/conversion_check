@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import sys
-# import traceback
+import traceback
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required.")
@@ -202,7 +202,7 @@ with pd.ExcelFile(filename) as xlsx:
                             pending = True
                             # Submission is Pending Review check all subsequent columns are blank.
                             if any([pd.notnull(col) for col in row[6:]]):
-                                print_error(index, 'PENDING REVIEW but unvalidated review information entered')
+                                print_error(index, 'PENDING REVIEW but review information entered')
                             else:
                                 print_warning(index, 'Line is PENDING REVIEW')
 
@@ -210,139 +210,142 @@ with pd.ExcelFile(filename) as xlsx:
                         if index in projects:
                             projects.remove(index)
 
-                        # Check Review Types
-                        if pd.isnull(row[3]):
+                    # Check Review Types
+                    if pd.isnull(row[3]):
+                        if not pending:
                             print_error(index, 'REVIEW TYPE required')
-                        elif row[3].strip() not in valid_values[sheet][REVIEW_VV_CAT]:
-                            if row[3].strip() not in REVIEW_TYPES:
-                                print_error(index, 'REVIEW TYPE {rev} invalid'.format(rev=row[3]))
-                            else:
-                                print_warning(index,
-                                              'REVIEW TYPE {rev} not supported by board type but does not cause failure'
-                                              .format(rev=row[3]))
+                    elif row[3].strip() not in valid_values[sheet][REVIEW_VV_CAT]:
+                        if row[3].strip() not in REVIEW_TYPES:
+                            print_error(index, 'REVIEW TYPE {rev} invalid'.format(rev=row[3]))
+                        else:
+                            print_warning(index,
+                                          'REVIEW TYPE {rev} not supported by board type but does not cause failure'
+                                          .format(rev=row[3]))
 
-                        # Check Action
-                        if pd.isnull(row[4]):
+                    # Check Action
+                    if pd.isnull(row[4]):
+                        if not pending:
                             print_error(index, 'ACTION required')
-                        elif row[4].strip() not in valid_values[sheet][ACTION_VV_CAT]:
-                            if row[4].strip() not in ACTIONS:
-                                print_error(index, 'ACTION {act} invalid'.format(act=row[4]))
-                            else:
-                                print_warning(
-                                    index,
-                                    'ACTION {act} not supported by board type but does not cause failure'
-                                    .format(act=row[4]))
+                    elif row[4].strip() not in valid_values[sheet][ACTION_VV_CAT]:
+                        if row[4].strip() not in ACTIONS:
+                            print_error(index, 'ACTION {act} invalid'.format(act=row[4]))
+                        else:
+                            print_warning(
+                                index,
+                                'ACTION {act} not supported by board type but does not cause failure'
+                                .format(act=row[4]))
 
-                        # Check Effective Date
-                        if pd.isnull(row[5]):
+                    # Check Effective Date
+                    if pd.isnull(row[5]):
+                        if not pending:
                             print_error(index, 'EFFECTIVE DATE required')
-                        elif not validate_date(row[5]):
-                            print_error(index, "EFFECTIVE DATE {date} invalid".format(date=row[5]))
-                        elif get_date(row[5]) > datetime.today():
-                            print_warning(index, "EFFECTIVE DATE {date} is in future".format(date=row[5]))
+                    elif not validate_date(row[5]):
+                        print_error(index, "EFFECTIVE DATE {date} invalid".format(date=row[5]))
+                    elif get_date(row[5]) > datetime.today():
+                        print_warning(index, "EFFECTIVE DATE {date} is in future".format(date=row[5]))
 
-                        # Check for non-numeric votes
-                        if any([pd.notnull(col) and not isinstance(col, int) and not isinstance(col, float) for col in row[6:8]]):
-                            print_warning(index, "VOTE non numeric")
+                    # Check for non-numeric votes
+                    if any([pd.notnull(col) and not isinstance(col, int) and not isinstance(col, float) for col in row[6:8]]):
+                        print_warning(index, "VOTE non numeric")
 
-                        # Check Risk Level
-                        if pd.notnull(row[9]) and row[9].strip() not in valid_values[sheet][RISK_VV_CAT]:
-                            # SRS, IBC, RDC do not record risk level. Providing a risk level for these boards does not cause
-                            # a failure. Don't reject a valid value
-                            if row[9].strip() not in RISK_LEVELS or sheet not in [SRS, IBC, RDC, IACUC]:
-                                print_error(index, 'RISK LEVEL {risk} invalid'.format(risk=row[9]))
+                    # Check Risk Level
+                    if pd.notnull(row[9]) and row[9].strip() not in valid_values[sheet][RISK_VV_CAT]:
+                        # SRS, IBC, RDC do not record risk level. Providing a risk level for these boards does not cause
+                        # a failure. Don't reject a valid value
+                        if row[9].strip() not in RISK_LEVELS or sheet not in [SRS, IBC, RDC, IACUC]:
+                            print_error(index, 'RISK LEVEL {risk} invalid'.format(risk=row[9]))
 
-                        # Check Project Status
-                        if pd.notnull(row[10]) and row[10].strip() not in valid_values[sheet][PRJ_STAT_VV_CAT]:
-                            if row[10].strip() not in PROJECT_STATUSES:
-                                print_error(index, 'PROJECT STATUS {status} invalid'.format(status=row[10]))
-                            else:
+                    # Check Project Status
+                    if pd.notnull(row[10]) and row[10].strip() not in valid_values[sheet][PRJ_STAT_VV_CAT]:
+                        if row[10].strip() not in PROJECT_STATUSES:
+                            print_error(index, 'PROJECT STATUS {status} invalid'.format(status=row[10]))
+                        else:
+                            print_warning(index,
+                                          'PROJECT STATUS {status} not supported by board but does not cause failure'
+                                          .format(status=row[10]))
+
+                    # Check Expiration Date
+                    if pd.notnull(row[11]):
+                        if not validate_date(row[11]):
+                            print_error(index, "EXPIRATION DATE {date} invalid".format(date=row[11]))
+                        else:
+                            expiration_date = get_date(row[11])
+                            if expiration_date <= datetime.today():
+                                print_warning(index, "EXPIRED PROJECT")
+
+                            # Check if Expiration Date is within next 3 years for IBC, IACUC, SRS boards
+                            # or 1 year for all others
+                            elif not expiration_date <= CURRENT_DATE.replace(
+                                    year=CURRENT_DATE.year + (3 if sheet in [IACUC, IBC, SRS] else 1)):
+                                print_warning(index, "Questionable EXPIRATION DATE: {date}".format(date=row[11]))
+
+                            # Check that Expiration is after Effective Date
+                            try:
+                                if pd.notnull(row[5]):
+                                    effective = get_date(row[5])
+                                    if expiration_date <= effective:
+                                        print_warning(index,
+                                                      "EXPIRATION DATE {date} less than EFFECTIVE DATE {eff_date}"
+                                                      .format(date=row[11], eff_date=row[5]))
+                            except ValueError:
+                                # We catch the invalid effective date earlier
+                                pass
+
+                    # Check Initial Approval Date
+                    if pd.notnull(row[12]):
+                        if not validate_date(row[12]):
+                            print_error(index, "INITIAL APPROVAL DATE {date} invalid".format(date=row[12]))
+                        else:
+                            initial_approval = get_date(row[12])
+
+                            # Confirm Initial approval <= than Effective
+                            try:
+                                if pd.notnull(row[5]):
+                                    effective = get_date(row[5])
+                                    if initial_approval > effective:
+                                        print_warning(index,
+                                                      "INITIAL APPROVAL DATE {date} greater than EFFECTIVE DATE {eff_date}"
+                                                      .format(date=row[12], eff_date=row[5]))
+                            except ValueError:
+                                # We catch the invalid effective date earlier
+                                pass
+
+
+
+                    # Check Report Due Date
+                    if pd.notnull(row[13]):
+                        if not validate_date(row[13]):
+                            print_error(index, "REPORT DUE {date} invalid".format(date=row[13]))
+                        else:
+                            if row[13] == row[11]:
+                                print_error(index,
+                                            "REPORT DUE {date} cannot equal EXPIRATION DATE {exp}".format(date=row[13],
+                                                                                                     exp=row[11]))
+                            report_due = get_date(row[13])
+
+                            if report_due <= datetime.today():
+                                print_warning(index, "REPORT PAST DUE")
+                            # Check if Report Due Date is within next year
+                            elif not report_due <= CURRENT_DATE.replace(
+                                    year=CURRENT_DATE.year + 1):
                                 print_warning(index,
-                                              'PROJECT STATUS {status} not supported by board but does not cause failure'
-                                              .format(status=row[10]))
+                                              "Questionable REPORT DUE DATE: {date}".format(date=row[13]))
 
-                        # Check Expiration Date
-                        if pd.notnull(row[11]):
-                            if not validate_date(row[11]):
-                                print_error(index, "EXPIRATION DATE {date} invalid".format(date=row[11]))
-                            else:
-                                expiration_date = get_date(row[11])
-                                if expiration_date <= datetime.today():
-                                    print_warning(index, "EXPIRED PROJECT")
-
-                                # Check if Expiration Date is within next 3 years for IBC, IACUC, SRS boards
-                                # or 1 year for all others
-                                elif not expiration_date <= CURRENT_DATE.replace(
-                                        year=CURRENT_DATE.year + (3 if sheet in [IACUC, IBC, SRS] else 1)):
-                                    print_warning(index, "Questionable EXPIRATION DATE: {date}".format(date=row[11]))
-
-                                # Check that Expiration is after Effective Date
-                                try:
-                                    if pd.notnull(row[5]):
-                                        effective = get_date(row[5])
-                                        if expiration_date <= effective:
-                                            print_warning(index,
-                                                          "EXPIRATION DATE {date} less than EFFECTIVE DATE {eff_date}"
-                                                          .format(date=row[11], eff_date=row[5]))
-                                except ValueError:
-                                    # We catch the invalid effective date earlier
-                                    pass
-
-                        # Check Initial Approval Date
-                        if pd.notnull(row[12]):
-                            if not validate_date(row[12]):
-                                print_error(index, "INITIAL APPROVAL DATE {date} invalid".format(date=row[12]))
-                            else:
-                                initial_approval = get_date(row[12])
-
-                                # Confirm Initial approval <= than Effective
-                                try:
-                                    if pd.notnull(row[5]):
-                                        effective = get_date(row[5])
-                                        if initial_approval > effective:
-                                            print_warning(index,
-                                                          "INITIAL APPROVAL DATE {date} greater than EFFECTIVE DATE {eff_date}"
-                                                          .format(date=row[12], eff_date=row[5]))
-                                except ValueError:
-                                    # We catch the invalid effective date earlier
-                                    pass
-
-
-
-                        # Check Report Due Date
-                        if pd.notnull(row[13]):
-                            if not validate_date(row[13]):
-                                print_error(index, "REPORT DUE {date} invalid".format(date=row[13]))
-                            else:
-                                if row[13] == row[11]:
-                                    print_error(index,
-                                                "REPORT DUE {date} cannot equal EXPIRATION DATE {exp}".format(date=row[13],
-                                                                                                         exp=row[11]))
-                                report_due = get_date(row[13])
-
-                                if report_due <= datetime.today():
-                                    print_warning(index, "REPORT PAST DUE")
-                                # Check if Report Due Date is within next year
-                                elif not report_due <= CURRENT_DATE.replace(
-                                        year=CURRENT_DATE.year + 1):
-                                    print_warning(index,
-                                                  "Questionable REPORT DUE DATE: {date}".format(date=row[13]))
-
-                                try:
-                                    if pd.notnull(row[5]):
-                                        effective = get_date(row[5])
-                                        if report_due <= effective:
-                                            print_warning(index,
-                                                          "REPORT DUE DATE {date} less than EFFECTIVE DATE {eff_date}"
-                                                          .format(date=row[13], eff_date=row[5]))
-                                except ValueError:
-                                    # We catch the invalid effective date earlier
-                                    pass
+                            try:
+                                if pd.notnull(row[5]):
+                                    effective = get_date(row[5])
+                                    if report_due <= effective:
+                                        print_warning(index,
+                                                      "REPORT DUE DATE {date} less than EFFECTIVE DATE {eff_date}"
+                                                      .format(date=row[13], eff_date=row[5]))
+                            except ValueError:
+                                # We catch the invalid effective date earlier
+                                pass
 
             except Exception as e:
                 print_error(index, "Error parsing line. Please review.")
                 print(e.__class__, e)
-                # traceback.print_exc()
+                traceback.print_exc()
 
     print("\nList of Un-reviewed projects")
     if len(projects) != 0:
